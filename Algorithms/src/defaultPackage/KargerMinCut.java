@@ -44,7 +44,7 @@ public class KargerMinCut {
 		}
 		Random random = new Random();
 		int va = 0, vb = 1;
-		for (int j = 0; j < 199; j++) {
+		for (int j = 0; j < 198; j++) {
 			va = 0;
 			vb = 1;
 			while (adjMatrix[va][vb] == 0) {
@@ -56,22 +56,20 @@ public class KargerMinCut {
 			}
 			adjMatrix[va][vb] = 0;
 			adjMatrix[vb][va] = 0;
-			adjMatrix[0][0]--;
-			adjMatrix[0][0]--;
-			for (int i = 1; i < 201; i++) {
-				if (adjMatrix[vb][i] == 1) {
-					adjMatrix[vb][i] = 0;
-					adjMatrix[va][i] = 1;
+			for (int i = 1; i <= 200; i++) {
+				if (adjMatrix[vb][i] >= 1) {
+					adjMatrix[va][i] += adjMatrix[vb][i];
+					adjMatrix[i][va] += adjMatrix[vb][i];
 					adjMatrix[i][vb] = 0;
-					adjMatrix[i][va] = 1;
+					adjMatrix[vb][i] = 0;
 				}
 			}
 		}
 		int count = 0;
 		for (int i = 1; i <= 200; i++) {
 			for (int j = i + 1; j <= 200; j++) {
-				if (adjMatrix[i][j] == 1) {
-					count++;
+				if (adjMatrix[i][j] >= 1) {
+					count += adjMatrix[i][j];
 				}
 			}
 		}
