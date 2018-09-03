@@ -9,14 +9,50 @@ import java.util.StringTokenizer;
 public class NetworkPacket {
 
 	public static void process(int[][] packet, int bufferSize) {
-		int[] buffer = new int[packet.length];
+		int[] buffer = new int[bufferSize];
 		int[] arrival = new int[packet.length];
-		int front = 0, back = 0;
-		for (int time = 0; front < packet.length; time++) {
-			if(back-front > bufferSize) {
-				if(packet[back][0] >= time) {
-					buffer[back] = 
+		if (packet.length > 0) {
+			int processCount = 0, i = 0;
+			int front = 0, back = 0, currentSize = 0;
+			int finish_time = 0;
+			for (int time = 0; processCount < packet.length; time++) {
+				if (finish_time == time && currentSize > 0) {
+					currentSize--;
+					processCount++;
 				}
+				while ((i < packet.length && packet[i][0] <= time && currentSize < bufferSize)
+						|| (time >= finish_time && currentSize > 0)) {
+					if (i < packet.length && packet[i][0] <= time && currentSize < bufferSize) {
+						buffer[back] = i;
+						i++;
+						back++;
+						currentSize++;
+						if (back == bufferSize) {
+							back = 0;
+						}
+					}
+					if (time >= finish_time && currentSize > 0) {
+						arrival[buffer[front]] = time;
+						finish_time = time + packet[buffer[front]][1];
+						if (finish_time == time && currentSize > 0) {
+							currentSize--;
+							processCount++;
+						}
+						front++;
+						if (front == bufferSize) {
+							front = 0;
+						}
+					}
+				}
+
+				while (i < packet.length && packet[i][0] <= time) {
+					arrival[i] = -1;
+					i++;
+					processCount++;
+				}
+			}
+			for (int j = 0; j < arrival.length; j++) {
+				System.out.println(arrival[j]);
 			}
 		}
 	}
