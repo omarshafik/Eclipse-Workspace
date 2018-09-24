@@ -84,7 +84,7 @@ public class KargerMinCut {
 		int min;
 		int result = getMinCut(adjMatrix);
 		min = result;
-		for (int i = 0; i < 200 * 200; i++) {
+		for (int i = 0; i < 100; i++) {
 			result = getMinCut(adjMatrix);
 			if (result < min) {
 				min = result;

@@ -57,6 +57,55 @@ public class NetworkPacket {
 		}
 	}
 
+	public static void process2(int[][] packet, int bufferSize) {
+		int[] buffer = new int[bufferSize];
+		int[] arrival = new int[packet.length];
+		int front = 0, back = 0;
+		int counter = 0;
+		int i = 0;
+		boolean arrived = false;
+		int time = packet[0][0];
+		int currentSize = 0;
+		while (counter < arrival.length) {
+			while (i < packet.length && packet[i][0] <= time) {
+				if (currentSize < bufferSize) {
+					buffer[back] = i;
+					i++;
+					back++;
+					currentSize++;
+					if (back == bufferSize) {
+						back = 0;
+					}
+				} else {
+					arrival[i] = -1;
+					i++;
+					counter++;
+				}
+				if (arrived == true) {
+					currentSize--;
+					arrived = false;
+				}
+			}
+			if (currentSize > 0) {
+				arrived = true;
+				arrival[buffer[front]] = time;
+				try {
+					time = Math.max(time + packet[buffer[front]][1], packet[buffer[front] + 1][0]);
+				} catch (Exception e) {
+					time = time + packet[buffer[front]][1];
+				}
+				counter++;
+				front++;
+				if (front == bufferSize) {
+					front = 0;
+				}
+			}
+		}
+		for (int j = 0; j < arrival.length; j++) {
+			System.out.println(arrival[j]);
+		}
+	}
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		FastScanner fs = new FastScanner(System.in);
@@ -69,7 +118,7 @@ public class NetworkPacket {
 			packet[i][1] = fs.nextInt();
 		}
 
-		process(packet, bufferSize);
+		process2(packet, bufferSize);
 
 	}
 
