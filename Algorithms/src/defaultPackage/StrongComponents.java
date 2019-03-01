@@ -180,7 +180,7 @@ public class StrongComponents {
 		Arrays.sort(arr);
 
 		for (int i = sccSize.size() - 1; i > sccSize.size() - 6; i--) {
-			System.out.println(arr[i]);
+			System.out.print(arr[i]+",");
 		}
 
 	}
