@@ -3,12 +3,8 @@ package defaultPackage;
 import java.util.Scanner;
 
 public class Brackets {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Scanner s = new Scanner(System.in);
-		char[] line = s.nextLine().toCharArray();
-		s.close();
+	
+	public static void check(char[] line) {
 		int[] stack = new int[line.length];
 		int i = -1;
 		int j = -1;
@@ -16,15 +12,15 @@ public class Brackets {
 		boolean fail = false;
 		for (char c : line) {
 			j++;
-			if (c == '[' || c == '{' || c == '(') {
+			if (c == '[' || c == '{' || c == '(' || c == '<') {
 				i++;
 				stack[i] = j;
-				match = ((line[stack[i]] == '[') ? ']' : ((line[stack[i]] == '{') ? '}' : ')'));
-			} else if (c == ']' || c == '}' || c == ')') {
+				match = ((line[stack[i]] == '[') ? ']' : ((line[stack[i]] == '{') ? '}' : ((line[stack[i]] == '<') ? '>' : ')')));
+			} else if (c == ']' || c == '}' || c == ')' || c == '>') {
 				if (c == match) {
 					i--;
 					if (i != -1)
-						match = ((line[stack[i]] == '[') ? ']' : ((line[stack[i]] == '{') ? '}' : ')'));
+						match = ((line[stack[i]] == '[') ? ']' : ((line[stack[i]] == '{') ? '}' : ((line[stack[i]] == '<') ? '>' : ')')));
 					else
 						match = '0';
 				} else {
@@ -35,16 +31,20 @@ public class Brackets {
 			}
 		}
 		if (i == -1) {
-			System.out.println("Success");
-		} else if (j == line.length - 1) {
-			if (fail == false)
-				System.out.println(stack[i] + 1);
-			else
-				System.out.println(j + 1);
+			System.out.println("YES");
 		} else {
-			System.out.println(j + 1);
+			System.out.println("NO");
 		}
+	}
 
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		for(int i = 0; i < n; i++) {
+			check(sc.next().toCharArray());
+		}
+		sc.close();
 	}
 
 }
